@@ -9,59 +9,50 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
     public Transform[] testSpheresTransforms;
 
-    private static double[][] Concat(double[,] array1, double[,] array2)
-    {
-        double[,] tmp = new double[array1.GetLength(0) + array2.GetLength(0)][];
-
-        array1.CopyTo(tmp, 0);
-        array2.CopyTo(tmp, array1.Length);
-
-        return tmp;
-    }
-
-    private static double[][] AppendTo2D(double[][] array, double x, double y)
-    {
-        double[][] result = new double[array.GetLength(0) +1][];
-        int i;
-        for (i = 0; i < array.Length ; i++)
-        {
-            result[i][0] = array[i][0];
-            result[i][1] = array[i][1];
-        }
-        result[i][0] = x;
-        result[i][1] = y;
-
-        return result;
-    }
 
     public void TrainAndTest()
     {
         Debug.Log("Training and Testing");
 
         int count = 0;
+        int blue_count = 0;
+        int red_count = 0;
         // Créer dataset_inputs
         // Créer dataest_expected_outputs
 
         double[] Y = new double[trainSpheresTransforms.GetLength(0)];
-        double[,] blue_points = new double[1,2];
-        double[,] red_points = new double[2,2];
 
         foreach (var trainSphere in trainSpheresTransforms)
         {
             if(trainSphere.position.y < 0)
+                blue_count++;
+            else
+                red_count++;
+        }
+        
+        double[,] blue_points = new double[blue_count,2];
+        double[,] red_points = new double[red_count,2];
+        count = 0;
+        blue_count = 0;
+        red_count = 0;
+        foreach (var trainSphere in trainSpheresTransforms)
+        {
+            if(trainSphere.position.y < 0)
             {
-                //blue_points[count][] = AppendTo2D(blue_points, trainSphere.position.x, trainSphere.position.z);
+                blue_points[blue_count,0] = trainSphere.position.x;
+                blue_points[blue_count,0] = trainSphere.position.z;
+                blue_count++;
                 Y[count] = -1;
             }
             else
             {
-                //red_points = AppendTo2D(red_points, trainSphere.position.x, trainSphere.position.z);
+                red_points[red_count,0] = trainSphere.position.x;
+                red_points[red_count,0] = trainSphere.position.z;
+                red_count++;
                 Y[count] = 1;
             }
             count++;
-            
         }
-
 
         /*double[,] blue_points = new double[,] {
             { 0.35, 0.5 }
@@ -70,18 +61,25 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             { 0.6, 0.6 },
             { 0.55, 0.7 }
         };*/
-       
-       
 
-        double[][] inputs = new double[blue_points.GetLength(0) + red_points.GetLength(0)][];
+        double[,] inputs = new double[blue_points.GetLength(0) + red_points.GetLength(0),2];
 
-        inputs = blue_points.CopyTo(inputs, 0);
-        red_points.CopyTo(inputs, blue_points.GetLength(0));
-
+        for (int i = 0; i < inputs.GetLength(0); i++)
+        {
+            if(i < blue_points.GetLength(0))
+            {
+                inputs[i,0] = blue_points[i,0];
+                inputs[i,1] = blue_points[i,1];
+            }
+            else
+            {
+                int j = i - blue_points.GetLength(0);
+                inputs[i,0] = red_points[j,0];
+                inputs[i,1] = red_points[j,1];
+            }
+        }
         //double[][] inputs = Concat(blue_points, red_points);
 
-        Debug.Log(blue_points.GetLength(0));
-        Debug.Log(red_points.GetLength(0));
         double[,] X = new double[blue_points.GetLength(0) + red_points.GetLength(0),3];
         for (int i = 0; i< X.GetLength(0); i++)
         {
