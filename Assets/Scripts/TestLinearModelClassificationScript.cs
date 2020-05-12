@@ -43,24 +43,26 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         
         foreach (var trainSpheres in trainSpheresTransforms)
         {
+            if(trainSpheres.position.y>5)
+            {
                 trainSpheres.position= new Vector3(
-                    Math.Abs(trainSpheres.position.x),
-                    trainSpheres.position.y,
-                    Math.Abs(trainSpheres.position.z)
+                    trainSpheres.position.x,
+                    trainSpheres.position.y*(-1f),
+                    trainSpheres.position.z
                 );
+            }
         }
 
     }
     public void TransfoXORThenTrain()
     {
-        
         foreach (var trainSpheres in trainSpheresTransforms)
         {
             if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
                 trainSpheres.position= new Vector3(
-                    trainSpheres.position.x,
+                    (float)Math.Pow(trainSpheres.position.x + trainSpheres.position.z, 2),
                     trainSpheres.position.y,
-                    trainSpheres.position.z
+                    (float)Math.Pow(trainSpheres.position.x + trainSpheres.position.z, 2)
                 );
             }
         }
