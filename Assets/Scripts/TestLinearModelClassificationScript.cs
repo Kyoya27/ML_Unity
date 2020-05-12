@@ -15,6 +15,78 @@ public class TestLinearModelClassificationScript : MonoBehaviour
     public Transform[] testSpheresTransforms;
 
 
+    public void TransfoSoftThenTrain()
+    {
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            if(testSpheres.position.y > 0 && testSpheres.position.x <1){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    1f,
+                    testSpheres.position.z
+                );
+            }
+            
+            else if(testSpheres.position.y < 0 && testSpheres.position.x >0.8){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    0f,
+                    testSpheres.position.z
+                );
+            }
+        }
+        TrainAndTest();
+    }
+    public void TransfoCrossThenTrain()
+    {
+        
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            if(testSpheres.position.y > 0 && testSpheres.position.x <1){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    1f,
+                    testSpheres.position.z
+                );
+            }
+            
+            else if(testSpheres.position.y < 0 && testSpheres.position.x >0.8){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    0f,
+                    testSpheres.position.z
+                );
+            }
+        }
+        TrainAndTest();
+
+    }
+    public void TransfoXORThenTrain()
+    {
+        
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            if(testSpheres.position.y > 0 && testSpheres.position.x <1){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    1f,
+                    testSpheres.position.z
+                );
+            }
+            
+            else if(testSpheres.position.y < 0 && testSpheres.position.x >0.8){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x,
+                    0f,
+                    testSpheres.position.z
+                );
+            }
+        }
+        TrainAndTest();
+
+    }
+
+
     public unsafe  void TrainAndTest()
     {
         Debug.Log("Training and Testing");
