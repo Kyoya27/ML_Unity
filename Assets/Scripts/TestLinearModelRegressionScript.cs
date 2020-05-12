@@ -14,6 +14,56 @@ public class TestLinearModelRegressionScript : MonoBehaviour
 
     public Transform[] testSpheresTransforms;
 
+        public void TransfoSoftThenTrain()
+    {
+        foreach (var trainSpheres in trainSpheresTransforms)
+        {
+            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
+                trainSpheres.position= new Vector3(
+                    1f,
+                    trainSpheres.position.y,
+                    trainSpheres.position.z
+                );
+            }
+            
+            else if(trainSpheres.position.y < 0 && trainSpheres.position.x >0.8){
+                trainSpheres.position= new Vector3(
+                    0f,
+                    trainSpheres.position.y,
+                    trainSpheres.position.z
+                );
+            }
+        }
+    }
+    public void TransfoCrossThenTrain()
+    {
+        
+        foreach (var trainSpheres in trainSpheresTransforms)
+        {
+                trainSpheres.position= new Vector3(
+                    Math.Abs(trainSpheres.position.x),
+                    trainSpheres.position.y,
+                    Math.Abs(trainSpheres.position.z)
+                );
+        }
+
+    }
+    public void TransfoXORThenTrain()
+    {
+        
+        foreach (var trainSpheres in trainSpheresTransforms)
+        {
+            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
+                trainSpheres.position= new Vector3(
+                    trainSpheres.position.x,
+                    trainSpheres.position.y,
+                    trainSpheres.position.z
+                );
+            }
+        }
+
+    }
+
 
     public unsafe  void TrainAndTest()
     {

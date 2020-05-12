@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class TestLinearModelClassificationScript : MonoBehaviour
+public class MLPRegressScript : MonoBehaviour
 {
     
 
@@ -14,64 +14,12 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
     public Transform[] testSpheresTransforms;
 
-    private int transfo = -1;
-
-
-    public void TransfoSoftThenTrain()
-    {
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
-                trainSpheres.position= new Vector3(
-                    1f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-            
-            else if(trainSpheres.position.y < 0 && trainSpheres.position.x >0.8){
-                trainSpheres.position= new Vector3(
-                    0f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-    }
-    public void TransfoCrossThenTrain()
-    {
-        
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-                trainSpheres.position= new Vector3(
-                    Math.Abs(trainSpheres.position.x),
-                    trainSpheres.position.y,
-                    Math.Abs(trainSpheres.position.z)
-                );
-        }
-
-    }
-    public void TransfoXORThenTrain()
-    {
-        
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
-                trainSpheres.position= new Vector3(
-                    trainSpheres.position.x,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-
-    }
 
 
     public unsafe  void TrainAndTest()
     {
         Debug.Log("Training and Testing");
-
+/*
         int count = 0;
         int blue_count = 0;
         int red_count = 0;
@@ -95,8 +43,6 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         model = VisualStudioLibWrapper.linear_model_create(2);
         // Train Model
         VisualStudioLibWrapper.linear_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000000, 0.01f);
-        //double* model = {-0.4, 0.4, 0.2};
-        //double[] model = new double [] {-0.4, 0.4, 0.2};
 
         // For each testSphere : Predict 
         foreach (var testSpheres in testSpheresTransforms)
@@ -112,6 +58,6 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         }
 
         // Delete Model
-        VisualStudioLibWrapper.clearArray(model);
+        VisualStudioLibWrapper.clearArray(model);*/
     }
 }
