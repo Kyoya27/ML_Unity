@@ -85,22 +85,23 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            linear_inputs[i] = X[i,1];
-            linear_inputs[i+1] = X[i,2];
-
+            linear_inputs[i*2] = trainSpheresTransforms[i].position.x;
+            linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
+            Debug.Log(linear_inputs[i*2]);
+            Debug.Log(linear_inputs[(i*2)+1]);
         }
 
         // Create Model
         model = VisualStudioLibWrapper.linear_model_create(2);
         // Train Model
-        VisualStudioLibWrapper.linear_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000, 0.01f);
+        VisualStudioLibWrapper.linear_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000000, 0.01f);
         //double* model = {-0.4, 0.4, 0.2};
         //double[] model = new double [] {-0.4, 0.4, 0.2};
 
         // For each testSphere : Predict 
         foreach (var testSpheres in testSpheresTransforms)
         {
-            double[]input = {testSpheres.position.x, testSpheres.position.z};
+            double[]input = { testSpheres.position.x, testSpheres.position.z};
             //double y = (float)(-model[1] / model[2] * testSpheresTransform.position.x - model[0] / model[2]);
             float y = (float)VisualStudioLibWrapper.linear_model_predict_classification(model, input, 2);
             testSpheres.position = new Vector3(
