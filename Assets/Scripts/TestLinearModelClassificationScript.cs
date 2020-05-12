@@ -1,26 +1,33 @@
-﻿using System.Collections;
+﻿
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class TestLinearModelClassificationScript : MonoBehaviour
 {
+
 
     public Transform[] trainSpheresTransforms;
 
     public Transform[] testSpheresTransforms;
 
 
-    public void TrainAndTest()
+    public unsafe  void TrainAndTest()
     {
         Debug.Log("Training and Testing");
 
         int count = 0;
         int blue_count = 0;
         int red_count = 0;
+        IntPtr model;
+
         // Créer dataset_inputs
         // Créer dataest_expected_outputs
 
-        double[] Y = new double[trainSpheresTransforms.GetLength(0)];
+        var Y = new double[trainSpheresTransforms.Length];
+        //double* Y;
 
         foreach (var trainSphere in trainSpheresTransforms)
         {
@@ -54,32 +61,6 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             count++;
         }
 
-        /*double[,] blue_points = new double[,] {
-            { 0.35, 0.5 }
-        };
-        double[,] red_points = new double[,] {
-            { 0.6, 0.6 },
-            { 0.55, 0.7 }
-        };*/
-
-        double[,] inputs = new double[blue_points.GetLength(0) + red_points.GetLength(0),2];
-
-        for (int i = 0; i < inputs.GetLength(0); i++)
-        {
-            if(i < blue_points.GetLength(0))
-            {
-                inputs[i,0] = blue_points[i,0];
-                inputs[i,1] = blue_points[i,1];
-            }
-            else
-            {
-                int j = i - blue_points.GetLength(0);
-                inputs[i,0] = red_points[j,0];
-                inputs[i,1] = red_points[j,1];
-            }
-        }
-        //double[][] inputs = Concat(blue_points, red_points);
-
         double[,] X = new double[blue_points.GetLength(0) + red_points.GetLength(0),3];
         for (int i = 0; i< X.GetLength(0); i++)
         {
@@ -99,32 +80,37 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             }
         }
 
-        //test
-        //double[] Y = new double []{1, -1, -1};
+        var linear_inputs = new double[trainSpheresTransforms.Length *2];
+
+        for (int i = 0; i < trainSpheresTransforms.Length; i++)
+        {
+            linear_inputs[i] = X[i,1];
+            linear_inputs[i+1] = X[i,2];
+
+        }
 
         // Create Model
-        //double* model = linear_model_create(len(inputs[0]));
-
+        model = VisualStudioLibWrapper.linear_model_create(2);
         // Train Model
-        //linear_model_train_classification(model, inputs, Y, iterations_count = 1000);
+        VisualStudioLibWrapper.linear_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000, 0.01f);
         //double* model = {-0.4, 0.4, 0.2};
-        double[] model = new double [] {-0.4, 0.4, 0.2};
+        //double[] model = new double [] {-0.4, 0.4, 0.2};
 
-        count = 0;
         // For each testSphere : Predict 
-        foreach (var testSpheresTransform in testSpheresTransforms)
+        foreach (var testSpheres in testSpheresTransforms)
         {
-            float y = (float)(-model[1] / model[2] * testSpheresTransform.position.x - model[0] / model[2]);
-            testSpheresTransform.position = new Vector3(
-                testSpheresTransform.position.x,
+            double[]input = {testSpheres.position.x, testSpheres.position.z};
+            //double y = (float)(-model[1] / model[2] * testSpheresTransform.position.x - model[0] / model[2]);
+            float y = (float)VisualStudioLibWrapper.linear_model_predict_classification(model, input, 2);
+            testSpheres.position = new Vector3(
+                testSpheres.position.x,
                 y,
-                testSpheresTransform.position.z
+                testSpheres.position.z
             );
-
-            count++;
         }
 
         // Delete Model
         //linear_model_delete(model);
+        //model = null;
     }
 }
