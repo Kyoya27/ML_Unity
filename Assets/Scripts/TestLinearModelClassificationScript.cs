@@ -69,7 +69,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             
             var posX = Math.Abs(trainSpheres.position.x);
             var posZ = Math.Abs(trainSpheres.position.z);
-            if(posX + posZ > 1){
+            if(trainSpheres.position.y > 0){
                 trainSpheres.position= new Vector3(
                     trainSpheres.position.x-5f,
                     trainSpheres.position.y,
@@ -81,7 +81,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         {
             var posX = Math.Abs(testSpheres.position.x);
             var posZ = Math.Abs(testSpheres.position.z);
-            if(posX + posZ > 1){
+            if(testSpheres.position.y > 0){
                 testSpheres.position= new Vector3(
                     testSpheres.position.x-5f,
                     testSpheres.position.y,
@@ -89,6 +89,32 @@ public class TestLinearModelClassificationScript : MonoBehaviour
                 );
             }
         }
+
+        /*foreach (var trainSpheres in trainSpheresTransforms)
+        {
+            
+            var posX = Math.Abs(trainSpheres.position.x);
+            var posZ = Math.Abs(trainSpheres.position.z);
+            if(trainSpheres.position.y > 0){
+                trainSpheres.position= new Vector3(
+                    trainSpheres.position.x-5f,
+                    trainSpheres.position.y,
+                    trainSpheres.position.z
+                );
+            }
+        }
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            var posX = Math.Abs(testSpheres.position.x);
+            var posZ = Math.Abs(testSpheres.position.z);
+            if(testSpheres.position.y > 0){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x-5f,
+                    testSpheres.position.y,
+                    testSpheres.position.z
+                );
+            }
+        }*/
 
     }
 

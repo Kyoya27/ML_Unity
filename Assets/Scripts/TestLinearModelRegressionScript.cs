@@ -125,7 +125,7 @@ public class TestLinearModelRegressionScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            Y[i] = trainSpheresTransforms[i].position.y > 0 ? 1 : -1;
+            Y[i] = trainSpheresTransforms[i].position.y;
             linear_inputs[i*2] = trainSpheresTransforms[i].position.x;
             linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
