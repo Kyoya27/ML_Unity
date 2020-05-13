@@ -23,7 +23,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         {
             if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
                 trainSpheres.position= new Vector3(
-                    1f,
+                    2f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
@@ -31,7 +31,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             
             else if(trainSpheres.position.y < 0 && trainSpheres.position.x >0.8){
                 trainSpheres.position= new Vector3(
-                    0f,
+                    -1f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
@@ -58,11 +58,19 @@ public class TestLinearModelClassificationScript : MonoBehaviour
     {
         foreach (var trainSpheres in trainSpheresTransforms)
         {
-            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
+            if(trainSpheres.position.y > 0 ){
                 trainSpheres.position= new Vector3(
-                    (float)Math.Pow(trainSpheres.position.x + trainSpheres.position.z, 2),
+                    2f,
                     trainSpheres.position.y,
-                    (float)Math.Pow(trainSpheres.position.x + trainSpheres.position.z, 2)
+                    trainSpheres.position.z
+                );
+            }
+            
+            else if(trainSpheres.position.y < 0){
+                trainSpheres.position= new Vector3(
+                    -1f,
+                    trainSpheres.position.y,
+                    trainSpheres.position.z
                 );
             }
         }
