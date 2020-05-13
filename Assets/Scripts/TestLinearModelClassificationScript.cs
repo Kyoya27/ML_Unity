@@ -16,128 +16,58 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
     private int transfo = -1;
 
+    public Vector3 AppliTransfo(Vector3 position)
+    {
+        var posX = position.x;
+        var posZ = position.z;
+
+        //SOFT
+        if(transfo == 0){
+            if ((posX <= 5 && posX >= 4 && posZ >= 3 && posZ <= 4) || (posX >= -3 && posX <= -2 && posZ >= 9 && posZ <= 10))
+            {
+                posX += 5;
+                posZ += 5;
+            }
+
+            if (posX <= 4 && posX >= 3 && posZ >= 6 && posZ <= 7)
+            {
+                posX -= 5;
+                posZ -= 5;
+            }
+        }
+
+        //CROSS
+        if(transfo == 1){
+            posX = Math.Abs(position.x);
+            posZ = Math.Abs(position.z);
+            if (posX > 3 && posZ > 3 )
+            {
+                posX += 3f;
+                posZ += 3f;
+            }
+        }
+
+        //XOR
+        if(transfo == 2){
+            posX = (float)Math.Pow(position.x + position.z, 2);
+            posZ = (float)Math.Pow(position.x + position.z, 2);
+        }
+        return new Vector3(posX, position.y, posZ);
+    }
 
     public void TransfoSoftThenTrain()
     {
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            var posX = trainSpheres.position.x;
-            var posZ = trainSpheres.position.z;
-            if(posX >=5 && posZ >1 && posZ <2){
-                trainSpheres.position= new Vector3(
-                    -5f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-            
-            if(posX <= -2 && posZ <8 && posZ >7){
-                trainSpheres.position= new Vector3(
-                    3f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-        foreach (var testSpheres in testSpheresTransforms)
-        {
-            var posX = testSpheres.position.x;
-            var posZ = testSpheres.position.z;
-            if(posX >=5 && posZ >1 && posZ <2){
-                testSpheres.position= new Vector3(
-                    -5f,
-                    testSpheres.position.y,
-                    testSpheres.position.z
-                );
-            }
-            
-            if(posX <= -2 && posZ <8 && posZ >7){
-                testSpheres.position= new Vector3(
-                    3f,
-                    testSpheres.position.y,
-                    testSpheres.position.z
-                );
-            }
-        }
+        transfo = 0;
     }
 
     public void TransfoCrossThenTrain()
     {
-        
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            
-            var posX = Math.Abs(trainSpheres.position.x);
-            var posZ = Math.Abs(trainSpheres.position.z);
-            if(trainSpheres.position.y > 0){
-                trainSpheres.position= new Vector3(
-                    trainSpheres.position.x-5f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-        foreach (var testSpheres in testSpheresTransforms)
-        {
-            var posX = Math.Abs(testSpheres.position.x);
-            var posZ = Math.Abs(testSpheres.position.z);
-            if(testSpheres.position.y > 0){
-                testSpheres.position= new Vector3(
-                    testSpheres.position.x-5f,
-                    testSpheres.position.y,
-                    testSpheres.position.z
-                );
-            }
-        }
-
-        /*foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            
-            var posX = Math.Abs(trainSpheres.position.x);
-            var posZ = Math.Abs(trainSpheres.position.z);
-            if(trainSpheres.position.y > 0){
-                trainSpheres.position= new Vector3(
-                    trainSpheres.position.x-5f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-        foreach (var testSpheres in testSpheresTransforms)
-        {
-            var posX = Math.Abs(testSpheres.position.x);
-            var posZ = Math.Abs(testSpheres.position.z);
-            if(testSpheres.position.y > 0){
-                testSpheres.position= new Vector3(
-                    testSpheres.position.x-5f,
-                    testSpheres.position.y,
-                    testSpheres.position.z
-                );
-            }
-        }*/
-
+        transfo = 1;
     }
 
     public void TransfoXORThenTrain()
     {
-        foreach (var trainSpheres in trainSpheresTransforms)
-        {
-            if(trainSpheres.position.x < 2 && trainSpheres.position.z > 1 && trainSpheres.position.z < 2){
-                trainSpheres.position= new Vector3(
-                    5f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-            else if(trainSpheres.position.x > 5.9 && trainSpheres.position.z > 0 && trainSpheres.position.z < 1){
-                trainSpheres.position= new Vector3(
-                    -3.2f,
-                    trainSpheres.position.y,
-                    trainSpheres.position.z
-                );
-            }
-        }
-
+        transfo = 2;
     }
 
 
@@ -159,9 +89,14 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            Y[i] = trainSpheresTransforms[i].position.y > 0 ? 1 : -1;
-            linear_inputs[i*2] = trainSpheresTransforms[i].position.x;
-            linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
+            var position = new Vector3();
+            if(transfo != -1)
+                position = AppliTransfo(trainSpheresTransforms[i].position);
+            else
+                position = trainSpheresTransforms[i].position;
+            Y[i] = position.y > 0 ? 1 : -1;
+            linear_inputs[i*2] = position.x;
+            linear_inputs[(i*2)+1] = position.z;
         }
 
         // Create Model
@@ -174,7 +109,12 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         // For each testSphere : Predict 
         foreach (var testSpheres in testSpheresTransforms)
         {
-            double[]input = { testSpheres.position.x, testSpheres.position.z};
+            var position = new Vector3();
+            if(transfo != -1)
+                position = AppliTransfo(testSpheres.position);
+            else
+                position = testSpheres.position;
+            double[]input = { position.x, position.z};
             //double y = (float)(-model[1] / model[2] * testSpheresTransform.position.x - model[0] / model[2]);
             float y = (float)VisualStudioLibWrapper.linear_model_predict_classification(model, input, 2);
             testSpheres.position = new Vector3(
