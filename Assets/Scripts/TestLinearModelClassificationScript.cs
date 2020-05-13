@@ -60,7 +60,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
         {
             if(trainSpheres.position.y > 0 ){
                 trainSpheres.position= new Vector3(
-                    2f,
+                    4f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
@@ -68,7 +68,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
             
             else if(trainSpheres.position.y < 0){
                 trainSpheres.position= new Vector3(
-                    -1f,
+                    -3f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
