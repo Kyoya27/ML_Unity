@@ -21,54 +21,91 @@ public class TestLinearModelClassificationScript : MonoBehaviour
     {
         foreach (var trainSpheres in trainSpheresTransforms)
         {
-            if(trainSpheres.position.y > 0 && trainSpheres.position.x <1){
+            var posX = trainSpheres.position.x;
+            var posZ = trainSpheres.position.z;
+            if(posX >=5 && posZ >1 && posZ <2){
                 trainSpheres.position= new Vector3(
-                    2f,
+                    -5f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
             }
             
-            else if(trainSpheres.position.y < 0 && trainSpheres.position.x >0.8){
+            if(posX <= -2 && posZ <8 && posZ >7){
                 trainSpheres.position= new Vector3(
-                    -1f,
+                    3f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
             }
         }
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            var posX = testSpheres.position.x;
+            var posZ = testSpheres.position.z;
+            if(posX >=5 && posZ >1 && posZ <2){
+                testSpheres.position= new Vector3(
+                    -5f,
+                    testSpheres.position.y,
+                    testSpheres.position.z
+                );
+            }
+            
+            if(posX <= -2 && posZ <8 && posZ >7){
+                testSpheres.position= new Vector3(
+                    3f,
+                    testSpheres.position.y,
+                    testSpheres.position.z
+                );
+            }
+        }
     }
+
     public void TransfoCrossThenTrain()
     {
         
         foreach (var trainSpheres in trainSpheresTransforms)
         {
-            if(trainSpheres.position.y>5)
-            {
+            
+            var posX = Math.Abs(trainSpheres.position.x);
+            var posZ = Math.Abs(trainSpheres.position.z);
+            if(posX + posZ > 1){
                 trainSpheres.position= new Vector3(
-                    trainSpheres.position.x,
-                    trainSpheres.position.y*(-1f),
+                    trainSpheres.position.x-5f,
+                    trainSpheres.position.y,
                     trainSpheres.position.z
+                );
+            }
+        }
+        foreach (var testSpheres in testSpheresTransforms)
+        {
+            var posX = Math.Abs(testSpheres.position.x);
+            var posZ = Math.Abs(testSpheres.position.z);
+            if(posX + posZ > 1){
+                testSpheres.position= new Vector3(
+                    testSpheres.position.x-5f,
+                    testSpheres.position.y,
+                    testSpheres.position.z
                 );
             }
         }
 
     }
+
     public void TransfoXORThenTrain()
     {
         foreach (var trainSpheres in trainSpheresTransforms)
         {
-            if(trainSpheres.position.y > 0 ){
+            if(trainSpheres.position.x < 2 && trainSpheres.position.z > 1 && trainSpheres.position.z < 2){
                 trainSpheres.position= new Vector3(
-                    4f,
+                    5f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
             }
-            
-            else if(trainSpheres.position.y < 0){
+            else if(trainSpheres.position.x > 5.9 && trainSpheres.position.z > 0 && trainSpheres.position.z < 1){
                 trainSpheres.position= new Vector3(
-                    -3f,
+                    -3.2f,
                     trainSpheres.position.y,
                     trainSpheres.position.z
                 );
@@ -96,7 +133,7 @@ public class TestLinearModelClassificationScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            Y[i] = trainSpheresTransforms[i].position.y;
+            Y[i] = trainSpheresTransforms[i].position.y > 0 ? 1 : -1;
             linear_inputs[i*2] = trainSpheresTransforms[i].position.x;
             linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
