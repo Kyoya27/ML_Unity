@@ -4622,7 +4622,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4ba2c3e1b44e34794184019d7ff289, type: 3}
+  m_Script: {fileID: 11500000, guid: 91d55f7269e759941aa43afb41c89818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   trainSpheresTransforms:
@@ -4730,6 +4730,7 @@ MonoBehaviour:
   - {fileID: 216125688}
   - {fileID: 410996601}
   - {fileID: 183524866}
+  npl: 0200000001000000
 --- !u!1 &964508172
 GameObject:
   m_ObjectHideFlags: 0

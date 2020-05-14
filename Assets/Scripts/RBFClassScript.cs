@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ public class RBFClassScript : MonoBehaviour
     /*
     W
     x
-    z*/
+    z
     struct Projection
     {
         double W;
@@ -29,7 +29,7 @@ public class RBFClassScript : MonoBehaviour
     /*void   addCenterPoint(const double y, const std::vector<double>& x);
     void   computeWeights(const bool useRegularization = false, const double lambda = 0.1);
     double getInterpolatedValue(const std::vector<double>& x) const;
-    */
+    *
     public Vector3 AppliTransfo(Vector3 position)
     {
         var posX = position.x;
@@ -115,7 +115,7 @@ public class RBFClassScript : MonoBehaviour
 
 
 
-        return 
+        //return;
 
     }
 
@@ -179,3 +179,4 @@ public class RBFClassScript : MonoBehaviour
         VisualStudioLibWrapper.clearArray(model);
     }
 }
+*/
