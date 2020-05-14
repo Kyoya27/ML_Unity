@@ -24,9 +24,13 @@ public class RBFClassScript : MonoBehaviour
 
     public Transform[] testSpheresTransforms;
 
-    public double getRBFValue(double epsilon, double x1, double x2)
+    public double getRBFValue(double epsilon, Transform x1, Transform x2)
     {
-        return Math.Exp(- epsilon *  Math.Pow(Math.Abs(x1 - x2), 2.0));
+        //return Math.Exp(- epsilon *  Math.Pow(x1 - x2, 2.0));
+        Debug.Log("X1(" + x1.position.x + " " + x1.position.y + " " + x1.position.z + "), X2(" + x2.position.x + " " + x2.position.y + " " + x2.position.z + ")");
+        var res = Math.Exp(-1 * epsilon *  Math.Pow(Math.Pow(Math.Pow(x1.position.x - x2.position.x, 2.0) + Math.Pow(x1.position.y - x2.position.y, 2.0) + Math.Pow(x1.position.z - x2.position.z, 2.0), 0.5), 2));
+        Debug.Log("RES:" + res);
+        return res;
     }
 
 
@@ -34,23 +38,27 @@ public class RBFClassScript : MonoBehaviour
     {
 
         var Ox = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
-        var Oz = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
+        //var Oz = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
             for (int j = 0; j < trainSpheresTransforms.Length; j++)
             {
-                Ox[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i].position.x, trainSpheresTransforms[j].position.x);
-                Oz[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i].position.z, trainSpheresTransforms[j].position.z);
+                Ox[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i], trainSpheresTransforms[j]);
+                //Oz[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i].position.z, trainSpheresTransforms[j].position.z);
             }
         }
 
         Matrix<double> OxMatrix = DenseMatrix.OfArray(Ox);
-        Matrix<double> OzMatrix = DenseMatrix.OfArray(Oz);
+        //Matrix<double> OzMatrix = DenseMatrix.OfArray(Oz);
         //Matrix<double> YMatrix = DenseMatrix.OfArray(Y);
+        Debug.Log(OxMatrix.RowCount);
+        Debug.Log(OxMatrix.ColumnCount);
 
         Matrix<double> OxInv = OxMatrix.Inverse();
-        Matrix<double> OzInv = OzMatrix.Inverse();
+        Debug.Log(OxInv.RowCount);
+        Debug.Log(OxInv.ColumnCount);
+        //Matrix<double> OzInv = OzMatrix.Inverse();
 
         
         var X = new double[trainSpheresTransforms.Length * trainSpheresTransforms.Length *2];
@@ -60,8 +68,9 @@ public class RBFClassScript : MonoBehaviour
             for (int j = 0; j < trainSpheresTransforms.Length; j++)
             {
                 X[count] = OxMatrix[i, j]; 
-                X[count+1] = OzMatrix[i, j];
-                count = count+2;
+                //X[count+1] = OzMatrix[i, j];
+                //count = count+2;
+                count++;
             }
         }
 
