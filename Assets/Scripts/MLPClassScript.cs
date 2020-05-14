@@ -18,7 +18,7 @@ public class MLPClassScript : MonoBehaviour
     {
         Debug.Log("Training and Testing");
 
-       /* var Y = new double[trainSpheresTransforms.Length];
+        var Y = new double[trainSpheresTransforms.Length];
         IntPtr model;
 
         var linear_inputs = new double[trainSpheresTransforms.Length *2];
@@ -30,10 +30,12 @@ public class MLPClassScript : MonoBehaviour
             linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
 
+	    //int npl[] = { 2, 3, 1 };
         // Create Model
-        model = VisualStudioLibWrapper.linear_model_create(2);
+	    //int npl[] = { 2, 3, 1 };
+        /*model = VisualStudioLibWrapper.linear_model_create(npl, 3);
         // Train Model
-        VisualStudioLibWrapper.linear_model_train_regression(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000000, 0.01f);
+        VisualStudioLibWrapper.mlp_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, class_nb == 2 ? 1 : class_nb, 0.01f);
 
         // For each testSphere : Predict 
         foreach (var testSpheres in testSpheresTransforms)
