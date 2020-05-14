@@ -24,11 +24,11 @@ public class MLPClassScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            if(trainSpheresTransforms[i].position.y == 0) {
-                Y[i] = classSphere[1];
-            } else if (trainSpheresTransforms[i].position.y > 0) {
+            if(trainSpheresTransforms[i].position.y == classSphere[2]) {
                 Y[i] = classSphere[2];
-            } else {
+            } else if (trainSpheresTransforms[i].position.y == classSphere[1] ) {
+                Y[i] = classSphere[1];
+            } else if (trainSpheresTransforms[i].position.y == classSphere[0] ) {
                 Y[i] = classSphere[0];
             }
             // Y[i] = trainSpheresTransforms[i].position.y >= 0 ? 1 : -1;
@@ -41,33 +41,36 @@ public class MLPClassScript : MonoBehaviour
         VisualStudioLibWrapper.mlp_model_train_classification(model, inputs, trainSpheresTransforms.Length, 2, Y, Y.Length, 1000000, 0.001f, false);
 
         // For each testSphere : Predict 
-        int max = 1;
+        double max = -2;
+        int idmax = 1;
         
         foreach (var testSpheres in testSpheresTransforms)
         {
             double[] input = { testSpheres.position.x, testSpheres.position.z};
             IntPtr y = VisualStudioLibWrapper.mlp_model_predict_classification(model, input, false);
+            /*double[] res = new double[npl[npl.Length - 1]];
+            Marshal.Copy(res, 0, y, res.Length);*/
             double* r = (double*) y.ToPointer();
-            double[] res = new double[npl[npl.Length - 1]];
-            Marshal.Copy(res, 0, y, res.Length);
 
             // Debug.Log("size = " + npl[npl.Length - 1]);
-            
-            for(int i = 1; i < npl[npl.Length - 1] + 1; i++) {
-                if(r[i] > r[max]) {
-                    max = i;
+            //Debug.Log(.GetLength(0));
+            max = r[1];
+            for(int i = 1; i < classSphere.Length+1; i++) {
+                //Debug.Log("r =" + r[i]);
+                if(r[i] > max) {
+                    max = r[i];
+                    idmax = i;
                 }
-                // Debug.Log("r =" + r[i]);
             }
 
-            Debug.Log("max = " + (max));
+            //Debug.Log("max = " + (max));
             testSpheres.position = new Vector3(
                 testSpheres.position.x,
-                (float)classSphere[max - 1],
+                (float)classSphere[idmax-1],
                 testSpheres.position.z
             );
-
-            max = 1;
         }
+
+        VisualStudioLibWrapper.clearArray(model);
     }
 }
