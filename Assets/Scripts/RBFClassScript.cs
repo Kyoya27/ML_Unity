@@ -1,4 +1,4 @@
-﻿
+﻿/*
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -13,8 +13,13 @@ public class RBFClassScript : MonoBehaviour
     /*
     W
     x
+<<<<<<< HEAD
     z*/
     public struct Projection
+=======
+    z
+    struct Projection
+>>>>>>> 2b721d3d7563898f8f638575b127e0755e323a11
     {
         public double[] W;
         public double[] X;
@@ -24,6 +29,70 @@ public class RBFClassScript : MonoBehaviour
 
     public Transform[] testSpheresTransforms;
 
+<<<<<<< HEAD
+=======
+    private int transfo = -1;
+
+    /*void   addCenterPoint(const double y, const std::vector<double>& x);
+    void   computeWeights(const bool useRegularization = false, const double lambda = 0.1);
+    double getInterpolatedValue(const std::vector<double>& x) const;
+    *
+    public Vector3 AppliTransfo(Vector3 position)
+    {
+        var posX = position.x;
+        var posZ = position.z;
+
+        //SOFT
+        if(transfo == 0){
+            if ((posX <= 5 && posX >= 4 && posZ >= 3 && posZ <= 4) || (posX >= -3 && posX <= -2 && posZ >= 9 && posZ <= 10))
+            {
+                posX += 5;
+                posZ += 5;
+            }
+
+            if (posX <= 4 && posX >= 3 && posZ >= 6 && posZ <= 7)
+            {
+                posX -= 5;
+                posZ -= 5;
+            }
+        }
+
+        //CROSS
+        if(transfo == 1){
+            posX = Math.Abs(position.x);
+            posZ = Math.Abs(position.z);
+            if (posX > 3 && posZ > 3 )
+            {
+                posX += 3f;
+                posZ += 3f;
+            }
+        }
+
+        //XOR
+        if(transfo == 2){
+            posX = (float)Math.Pow(position.x + position.z, 2);
+            posZ = (float)Math.Pow(position.x + position.z, 2);
+        }
+        return new Vector3(posX, position.y, posZ);
+    }
+
+
+    public void TransfoSoftThenTrain()
+    {
+        transfo = 0;
+    }
+
+    public void TransfoCrossThenTrain()
+    {
+        transfo = 1;
+    }
+
+    public void TransfoXORThenTrain()
+    {
+        transfo = 2;
+    }
+
+>>>>>>> 2b721d3d7563898f8f638575b127e0755e323a11
     public double getRBFValue(double epsilon, double x1, double x2)
     {
         return Math.Exp(- epsilon *  Math.Pow(Math.Abs(x1 - x2), 2.0));
@@ -65,7 +134,12 @@ public class RBFClassScript : MonoBehaviour
             }
         }
 
+<<<<<<< HEAD
         return X;
+=======
+
+        //return;
+>>>>>>> 2b721d3d7563898f8f638575b127e0755e323a11
 
     }
 
@@ -119,3 +193,4 @@ public class RBFClassScript : MonoBehaviour
         //VisualStudioLibWrapper.clearArray(model);
     }
 }
+*/
