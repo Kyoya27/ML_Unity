@@ -24,14 +24,14 @@ public class MLPClassScript : MonoBehaviour
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            if(trainSpheresTransforms[i].position.y == classSphere[2]) {
+            /*if(trainSpheresTransforms[i].position.y == classSphere[2]) {
                 Y[i] = classSphere[2];
             } else if (trainSpheresTransforms[i].position.y == classSphere[1] ) {
                 Y[i] = classSphere[1];
             } else if (trainSpheresTransforms[i].position.y == classSphere[0] ) {
                 Y[i] = classSphere[0];
-            }
-            // Y[i] = trainSpheresTransforms[i].position.y >= 0 ? 1 : -1;
+            }*/
+            Y[i] = trainSpheresTransforms[i].position.y >= 0 ? 1 : -1;
             inputs[i*2] = trainSpheresTransforms[i].position.x;
             inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
@@ -62,13 +62,19 @@ public class MLPClassScript : MonoBehaviour
                     idmax = i;
                 }
             }
-
-            //Debug.Log("max = " + (max));
-            testSpheres.position = new Vector3(
-                testSpheres.position.x,
-                (float)classSphere[idmax-1],
-                testSpheres.position.z
-            );
+            if(classSphere.Length == 2){
+                testSpheres.position = new Vector3(
+                    testSpheres.position.x,
+                    (float)r[1],
+                    testSpheres.position.z
+                );
+            }else{
+                testSpheres.position = new Vector3(
+                    testSpheres.position.x,
+                    (float)classSphere[idmax-1],
+                    testSpheres.position.z
+                );
+            }
         }
 
         VisualStudioLibWrapper.clearArray(model);

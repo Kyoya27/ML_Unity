@@ -7,57 +7,69 @@ using UnityEngine;
 
 public class MLPRegressScript : MonoBehaviour
 {
-    
-
-
     public Transform[] trainSpheresTransforms;
 
     public Transform[] testSpheresTransforms;
+    
+    public int[] npl;
 
-
-
-    public unsafe  void TrainAndTest()
+    public double[] classSphere;
+    public unsafe void TrainAndTest()
     {
         Debug.Log("Training and Testing");
-/*
-        int count = 0;
-        int blue_count = 0;
-        int red_count = 0;
-
-        // Créer dataset_inputs
-        // Créer dataest_expected_outputs
 
         var Y = new double[trainSpheresTransforms.Length];
-        IntPtr model;
 
-        var linear_inputs = new double[trainSpheresTransforms.Length *2];
+        var inputs = new double[trainSpheresTransforms.Length *2];
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
-            Y[i] = trainSpheresTransforms[i].position.y;
-            linear_inputs[i*2] = trainSpheresTransforms[i].position.x;
-            linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
+            /*if(trainSpheresTransforms[i].position.y == classSphere[2]) {
+                Y[i] = classSphere[2];
+            } else if (trainSpheresTransforms[i].position.y == classSphere[1] ) {
+                Y[i] = classSphere[1];
+            } else if (trainSpheresTransforms[i].position.y == classSphere[0] ) {
+                Y[i] = classSphere[0];
+            }*/
+             Y[i] = trainSpheresTransforms[i].position.y >= 0 ? 1 : -1;
+            inputs[i*2] = trainSpheresTransforms[i].position.x;
+            inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
 
-        // Create Model
-        model = VisualStudioLibWrapper.linear_model_create(2);
-        // Train Model
-        VisualStudioLibWrapper.linear_model_train_classification(model, linear_inputs, trainSpheresTransforms.Length, 2, Y, Y.Length,1000000, 0.01f);
+        //int[] npl = {2, 1};
+        IntPtr model = VisualStudioLibWrapper.create_mlp_model(npl, npl.Length);
+        VisualStudioLibWrapper.mlp_model_train_regression(model, inputs, trainSpheresTransforms.Length, 2, Y, Y.Length, 1000000, 0.001f, true);
 
         // For each testSphere : Predict 
+        double max = -2;
+        int idmax = 1;
+        
         foreach (var testSpheres in testSpheresTransforms)
         {
-            double[]input = { testSpheres.position.x, testSpheres.position.z};
-            //double y = (float)(-model[1] / model[2] * testSpheresTransform.position.x - model[0] / model[2]);
-            float y = (float)VisualStudioLibWrapper.linear_model_predict_classification(model, input, 2);
+            double[] input = { testSpheres.position.x, testSpheres.position.z};
+            IntPtr y = VisualStudioLibWrapper.mlp_model_predict_classification(model, input, true);
+            /*double[] res = new double[npl[npl.Length - 1]];
+            Marshal.Copy(res, 0, y, res.Length);*/
+            double* r = (double*) y.ToPointer();
+
+            // Debug.Log("size = " + npl[npl.Length - 1]);
+            //Debug.Log(.GetLength(0));
+            /*max = r[1];
+            for(int i = 1; i < classSphere.Length+1; i++) {
+                if(r[i] > max) {
+                    max = r[i];
+                    idmax = i;
+                }
+            }*/
+
+            //Debug.Log("max = " + (max));
             testSpheres.position = new Vector3(
                 testSpheres.position.x,
-                y,
+                (float)r[1],
                 testSpheres.position.z
             );
         }
 
-        // Delete Model
-        VisualStudioLibWrapper.clearArray(model);*/
+        VisualStudioLibWrapper.clearArray(model);
     }
 }
