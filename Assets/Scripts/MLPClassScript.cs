@@ -38,7 +38,7 @@ public class MLPClassScript : MonoBehaviour
 
         //int[] npl = {2, 1};
         IntPtr model = VisualStudioLibWrapper.create_mlp_model(npl, npl.Length);
-        VisualStudioLibWrapper.mlp_model_train_classification(model, inputs, trainSpheresTransforms.Length, 2, Y, Y.Length, 1000000, 0.001f, false);
+        VisualStudioLibWrapper.mlp_model_train_classification(model, inputs, trainSpheresTransforms.Length, 2, Y, Y.Length, 1000000, 0.001f);
 
         // For each testSphere : Predict 
         double max = -2;
