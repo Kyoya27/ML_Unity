@@ -35,6 +35,22 @@ public class RBFClassScript : MonoBehaviour
         return Math.Exp(gam);
     }
 
+    public double getRBFValueD(double epsilon, double x1, double x2)
+    {
+        double x = Math.Pow(x1 - x2, 2);
+        double normalized = Math.Sqrt(x);
+        double pow = Math.Pow(normalized, 2);
+        double gam = -1 * epsilon * pow;
+        return Math.Exp(gam);
+        /*var res = Math.Exp((-1) * epsilon *  Math.Pow(
+                    Math.Pow(
+                        Math.Pow(x1-x2,2)
+                    ,0.5)
+                , 2.0));
+        //Debug.Log("RES:" + res);
+        return res;*/
+    }
+
 
     public unsafe void RBFEntries()
     {
@@ -59,9 +75,9 @@ public class RBFClassScript : MonoBehaviour
             linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
 
-        var multiY = new double[Y.Length, 1];
         var Ox = new double[trainSpheresTransforms.Length, trainSpheresTransforms.Length];
         //var Oz = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
+        var multiY = new double[Y.Length, 1];
 
         for (int i = 0; i < trainSpheresTransforms.Length; i++)
         {
@@ -70,7 +86,7 @@ public class RBFClassScript : MonoBehaviour
                 Ox[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i].position, trainSpheresTransforms[j].position);
                 //Oz[i,j] = getRBFValue(epsilon, trainSpheresTransforms[i].position.z, trainSpheresTransforms[j].position.z);
             }
-            multiY[i, 0] = Y[i];
+            multiY[i,0] = Y[i];
         }
 
         var l = trainSpheresTransforms.Length;
@@ -128,25 +144,55 @@ public class RBFClassScript : MonoBehaviour
 
         // VisualStudioLibWrapper.linear_model_train_classification(model, inputs, 3, 1, Y, 3, 100000, 0.01);
 
-
-        // var X = new double[trainSpheresTransforms.Length * trainSpheresTransforms.Length *2];
-        // var count = 0;
-        // for (int i = 0; i < trainSpheresTransforms.Length; i++)
-        // {
-        //     for (int j = 0; j < trainSpheresTransforms.Length; j++)
-        //     {
-        //         X[count] = OxMatrix[i, j]; 
-        //         //X[count+1] = OzMatrix[i, j];
-        //         //count = count+2;
-        //         count++;
-        //     }
-        // }
-
-        // return X;
-
     }
 
-    /*public unsafe  void TrainAndTest()
+     public double[] RBFEntriesD(double epsilon, double[] Y)
+    {
+
+        var Ox = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
+        var Oz = new double[trainSpheresTransforms.Length,trainSpheresTransforms.Length];
+        var multiY = new double[Y.Length, 1];
+
+        for (int i = 0; i < trainSpheresTransforms.Length; i++)
+        {
+            for (int j = 0; j < trainSpheresTransforms.Length; j++)
+            {
+                Ox[i,j] = getRBFValueD(epsilon, trainSpheresTransforms[i].position.x, trainSpheresTransforms[j].position.x);
+                Oz[i,j] = getRBFValueD(epsilon, trainSpheresTransforms[i].position.z, trainSpheresTransforms[j].position.z);
+            }
+            multiY[i,0] = Y[i];
+
+        }
+        Debug.Log(multiY.ToString());
+
+        Matrix<double> OxMatrix = DenseMatrix.OfArray(Ox);
+        Matrix<double> OzMatrix = DenseMatrix.OfArray(Oz);
+        Matrix<double> YMatrix = DenseMatrix.OfArray(multiY);
+
+        Matrix<double> OxInv = OxMatrix.Inverse();
+        Matrix<double> OzInv = OzMatrix.Inverse();
+
+        Matrix<double> Wx = OxInv.Multiply(YMatrix);
+        Matrix<double> Wz = OzInv.Multiply(YMatrix);
+
+        
+        var X = new double[trainSpheresTransforms.Length *2];
+        var count = 0;
+        for (int i = 0; i < trainSpheresTransforms.Length; i++)
+        {
+            X[count*2] = Wx[i, 0]; 
+            X[(count*2)+1] = Wz[i, 0];
+            Debug.Log("final : " + Wx[i, 0] + " , " +Wz[i, 0]);
+            Debug.Log("inv : " + OxInv[i, 0] + " , " +OzInv[i, 0]);
+            Debug.Log("base : " + OxMatrix[i, 0] + " , " +OzMatrix[i, 0]);
+
+        }
+        return X;
+    }
+
+
+
+    public unsafe  void TrainAndTest()
     {
         Debug.Log("Training and Testing");
 
@@ -169,7 +215,7 @@ public class RBFClassScript : MonoBehaviour
             linear_inputs[(i*2)+1] = trainSpheresTransforms[i].position.z;
         }
 
-        //var matrix_inputs = RBFEntries(1, Y);
+        var matrix_inputs = RBFEntriesD(0.5, Y);
 
         // Create Model
         model = VisualStudioLibWrapper.linear_model_create(trainSpheresTransforms.Length);
@@ -193,5 +239,5 @@ public class RBFClassScript : MonoBehaviour
 
         // Delete Model
         //VisualStudioLibWrapper.clearArray(model);
-    }*/
+    }
 }

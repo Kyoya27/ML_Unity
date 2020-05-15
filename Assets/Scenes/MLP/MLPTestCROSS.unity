@@ -1579,7 +1579,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3, y: 0.8}
   m_AnchorMax: {x: 0.7, y: 1}
-  m_AnchoredPosition: {x: -356, y: 0}
+  m_AnchoredPosition: {x: -356.00003, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &273167165
@@ -1625,7 +1625,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 963194230}
+      - m_Target: {fileID: 0}
         m_MethodName: TransfoCrossThenTrain
         m_Mode: 1
         m_Arguments:
@@ -3549,7 +3549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 616080766}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.75, y: 2.77, z: 14.2}
+  m_LocalPosition: {x: 2.04, y: 2.77, z: 14.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -3707,7 +3707,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 626315836}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.34, y: 3.1, z: 12.889999}
+  m_LocalPosition: {x: 1.01, y: 3.1, z: 12.889999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -5779,7 +5779,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 963194225}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: da4ba2c3e1b44e34794184019d7ff289, type: 3}
+  m_Script: {fileID: 11500000, guid: 91d55f7269e759941aa43afb41c89818, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   trainSpheresTransforms:
@@ -5922,6 +5922,10 @@ MonoBehaviour:
   - {fileID: 216125688}
   - {fileID: 410996601}
   - {fileID: 183524866}
+  npl: 0200000001000000
+  classSphere:
+  - 0
+  - 1
 --- !u!1 &964508172
 GameObject:
   m_ObjectHideFlags: 0
@@ -8681,7 +8685,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1577973279}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.84, y: 1.5499997, z: 14.51}
+  m_LocalPosition: {x: 2.11, y: 1.5499997, z: 14.51}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
