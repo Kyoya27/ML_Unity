@@ -4074,7 +4074,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 963194230}
-        m_MethodName: TrainAndTest
+        m_MethodName: RBFEntries
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
